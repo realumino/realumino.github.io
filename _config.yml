@@ -1,3 +1,36 @@
-theme: jekyll-theme-minimal
-title: Octocat's homepage
-description: Bookmark this to keep an eye on my project updates!
+# ── Site ──
+title: "Lumino"
+tagline: "thoughts & reflections"
+lang: en
+langs:
+  - key: en
+    label: EN
+    name: English
+  - key: zh
+    label: 中文
+    name: 简体中文
+  - key: ja
+    label: 日本語
+    name: 日本語
+
+# ── Domain (for RSS & canonical URLs) ──
+url: https://blog.realumino.org
+
+# ── Build ──
+markdown: kramdown
+permalink: /:year/:month/:title/
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+
+# ── Exclude ──
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - README.md

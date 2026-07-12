@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if page.title %}{{ page.title }} · {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
+  <meta name="description" content="{{ page.excerpt | strip_html | normalize_whitespace | truncate: 160 | default: site.description }}">
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+  <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | relative_url }}">
+
+  {% for lang in site.langs %}
+    {% if lang.key != page.lang %}
+      {% assign alt_post = site.posts | where: "ref", page.ref | where: "lang", lang.key | first %}
+      {% if alt_post %}
+  <link rel="alternate" hreflang="{{ lang.key }}" href="{{ alt_post.url | absolute_url }}">
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+  <link rel="alternate" hreflang="x-default" href="{{ "/" | absolute_url }}">
+
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #faf9f7;
+      --surface: #ffffff;
+      --text: #1a1a1e;
+      --text-secondary: #6b7280;
+      --text-tertiary: #9ca3af;
+      --border: #e5e7eb;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-light: #eff6ff;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --max-w: 680px;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "Noto Sans CJK SC", "Noto Sans JP", sans-serif;
+      --font-mono: "SF Mono", "JetBrains Mono", "Cascadia Code", ui-monospace, monospace;
+    }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--accent-hover); }
+    img { max-width: 100%; height: auto; border-radius: var(--radius-sm); }
+    ::selection { background: var(--accent); color: #fff; }
+
+    /* ── Layout ── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+
+    /* ── Header ── */
+    header {
+      padding: 32px 0 24px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 48px;
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .site-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+    .site-title:hover { color: var(--accent); }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+
+    /* ── Language Switcher ── */
+    .lang-switcher {
+      display: flex;
+      gap: 2px;
+      background: var(--border);
+      border-radius: 6px;
+      padding: 2px;
+    }
+    .lang-btn {
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border: none;
+      border-radius: 4px;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font);
+    }
+    .lang-btn:hover { color: var(--text); }
+    .lang-btn.active {
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    }
+
+    /* ── Navigation ── */
+    nav { display: flex; gap: 20px; }
+    nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--text); }
+
+    /* ── Main ── */
+    main { min-height: 50vh; padding-bottom: 64px; }
+
+    /* ── Post List ── */
+    .posts-header {
+      margin-bottom: 40px;
+    }
+    .posts-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+    }
+    .posts-header p {
+      color: var(--text-secondary);
+      margin-top: 8px;
+      font-size: 0.95rem;
+    }
+
+    .post-item {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .post-item:first-of-type { padding-top: 0; }
+    .post-meta {
+      font-size: 0.8125rem;
+      color: var(--text-tertiary);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .post-meta .dot { color: var(--text-tertiary); }
+    .post-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+    .post-title a {
+      color: var(--text);
+      transition: color 0.2s;
+    }
+    .post-title a:hover { color: var(--accent); }
+    .post-excerpt {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .post-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .post-tag {
+      display: inline-block;
+      padding: 2px 10px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      background: var(--accent-light);
+      color: var(--accent);
+      border-radius: 100px;
+    }
+
+    /* ── Single Post ── */
+    .post-header {
+      margin-bottom: 40px;
+    }
+    .post-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.35;
+      margin-bottom: 16px;
+    }
+    .post-header .post-meta {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    .post-content {
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+    .post-content h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-top: 40px;
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+    }
+    .post-content h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-top: 32px;
+      margin-bottom: 12px;
+    }
+    .post-content p {
+      margin-bottom: 20px;
+    }
+    .post-content a { text-decoration: underline; text-underline-offset: 2px; }
+    .post-content blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 20px;
+      margin: 24px 0;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+    .post-content code {
+      font-family: var(--font-mono);
+      font-size: 0.875em;
+      background: var(--border);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .post-content pre {
+      background: #1a1a1e;
+      color: #e5e7eb;
+      padding: 20px 24px;
+      border-radius: var(--radius);
+      overflow-x: auto;
+      margin: 24px 0;
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+    .post-content pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+    .post-content ul, .post-content ol {
+      margin: 0 0 20px 24px;
+    }
+    .post-content li { margin-bottom: 6px; }
+    .post-content hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 40px 0;
+    }
+
+    /* ── Translation notice ── */
+    .translation-notice {
+      margin-top: 48px;
+      padding: 16px 20px;
+      background: var(--accent-light);
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    .translation-notice a { font-weight: 500; }
+
+    /* ── Footer ── */
+    footer {
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.8125rem;
+      color: var(--text-tertiary);
+    }
+
+    /* ── Empty State ── */
+    .empty-state {
+      text-align: center;
+      padding: 80px 0;
+      color: var(--text-secondary);
+    }
+    .empty-state p { font-size: 1rem; }
+
+    /* ── About Page ── */
+    .about-content { line-height: 1.8; }
+    .about-content p { margin-bottom: 16px; }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      header { padding: 24px 0 20px; margin-bottom: 32px; }
+      .header-inner { flex-direction: column; gap: 16px; }
+      .header-right { width: 100%; justify-content: space-between; }
+      .site-title { font-size: 1.1rem; }
+      .post-header h1 { font-size: 1.5rem; }
+      .posts-header h1 { font-size: 1.5rem; }
+      .container { padding: 0 20px; }
+    }
+
+    /* ── Fade-in Animation ── */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { animation: fadeIn 0.5s ease-out; }
+
+    /* ── Language visibility ── */
+    [data-lang] { display: none; }
+    [data-lang].visible { display: block; }
+    .post-item[data-lang].visible { display: flex; flex-direction: column; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <a href="{{ "/" | relative_url }}" class="site-title" data-i18n="site_title">{{ site.title }}</a>
+      <div class="header-right">
+        <nav>
+          <a href="{{ "/" | relative_url }}" data-i18n="nav_home" class="nav-link" data-lang-key="nav_home">Home</a>
+          <a href="{{ "/archive" | relative_url }}" data-i18n="nav_archive" class="nav-link" data-lang-key="nav_archive">Archive</a>
+          <a href="{{ "/about" | relative_url }}" data-i18n="nav_about" class="nav-link" data-lang-key="nav_about">About</a>
+        </nav>
+        <div class="lang-switcher">
+          {% for lang in site.langs %}
+          <button class="lang-btn" data-lang-btn="{{ lang.key }}">{{ lang.label }}</button>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container fade-in">
+    {{ content }}
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <span data-i18n="footer_text">{{ site.title }}</span>
+  </div>
+</footer>
+
+<script>
+(function() {
+  const STORAGE_KEY = 'lumino_lang';
+
+  // ── Translations ──
+  const i18n = {{ site.data.translations | jsonify }};
+
+  // ── Current language ──
+  let currentLang = localStorage.getItem(STORAGE_KEY) || '{{ site.lang }}';
+
+  // ── DOM refs ──
+  const langBtns = document.querySelectorAll('[data-lang-btn]');
+  const langElements = document.querySelectorAll('[data-lang]');
+  const i18nElements = document.querySelectorAll('[data-i18n]');
+
+  // ── Switch language ──
+  function switchLang(lang) {
+    currentLang = lang;
+    localStorage.setItem(STORAGE_KEY, lang);
+
+    // Update button states
+    langBtns.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.langBtn === lang);
+    });
+
+    // Toggle visibility for lang-scoped elements
+    langElements.forEach(el => {
+      el.classList.toggle('visible', el.dataset.lang === lang);
+    });
+
+    // Update i18n text content
+    i18nElements.forEach(el => {
+      const key = el.dataset.i18n;
+      if (i18n[lang] && i18n[lang][key]) {
+        el.textContent = i18n[lang][key];
+      }
+    });
+
+    // Update HTML lang attribute
+    document.documentElement.lang = lang;
+
+    // Dispatch event for other scripts
+    document.dispatchEvent(new CustomEvent('langchange', { detail: { lang } }));
+  }
+
+  // ── Init ──
+  langBtns.forEach(btn => {
+    btn.addEventListener('click', () => switchLang(btn.dataset.langBtn));
+  });
+
+  // Also respect lang query param (?lang=en)
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlLang = urlParams.get('lang');
+  if (urlLang && i18n[urlLang]) {
+    switchLang(urlLang);
+  } else {
+    switchLang(currentLang);
+  }
+})();
+</script>
+
+</body>
+</html>
