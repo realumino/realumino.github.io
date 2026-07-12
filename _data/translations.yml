@@ -1,54 +1,30 @@
+# i18n placeholder — add languages here when needed
+zh:
+  site_title: Lumino
+  site_subtitle: 随想与笔记
+  nav_home: 首页
+  nav_tags: 标签
+  nav_archive: 归档
+  nav_about: 关于
+  posted_on: 发布于
+  tags_label: 标签
+  back_home: ← 返回首页
+  no_posts: 暂无文章
+  all_tags: 所有标签
+  posts_tagged: "#%{tag} 的文章"
+  footer_text: "© %{year} Lumino · Powered by Jekyll & GitHub Pages"
+
 en:
-  site_title: "Lumino"
-  site_subtitle: "thoughts & reflections"
-  nav_home: "Home"
-  nav_archive: "Archive"
-  nav_about: "About"
-  read_post: "Read"
-  posted_on: "Posted on"
-  reading_time: "min read"
-  tag: "Topics"
-  all_posts: "All Posts"
-  no_posts: "No posts yet."
-  language: "Language"
-  view_all: "View all posts"
+  site_title: Lumino
+  site_subtitle: Thoughts & Notes
+  nav_home: Home
+  nav_tags: Tags
+  nav_archive: Archive
+  nav_about: About
+  posted_on: Posted on
+  tags_label: Tags
   back_home: "← Back to Home"
-  translation_notice: "Also available in"
-  and: "and"
-  footer_text: "© Lumino"
-err:
-  site_title: "Lumino"
-  site_subtitle: "Lumino 的博客"
-  nav_home: "首页"
-  nav_archive: "归档"
-  nav_about: "关于"
-  read_post: "阅读"
-  posted_on: "发布于"
-  reading_time: "分钟阅读"
-  tag: "标签"
-  all_posts: "全部文章"
-  no_posts: "暂无文章。"
-  language: "语言"
-  view_all: "查看全部文章"
-  back_home: "← 返回首页"
-  translation_notice: "其他语言版本"
-  and: "和"
-  footer_text: "© Lumino"
-ja:
-  site_title: "Lumino"
-  site_subtitle: "Lumino のブログ"
-  nav_home: "ホーム"
-  nav_archive: "アーカイブ"
-  nav_about: "について"
-  read_post: "読む"
-  posted_on: "公開日"
-  reading_time: "分で読める"
-  tag: "タグ"
-  all_posts: "すべての記事"
-  no_posts: "まだ記事はありません。"
-  language: "言語"
-  view_all: "すべての記事を見る"
-  back_home: "← ホームに戻る"
-  translation_notice: "他の言語でも読む"
-  and: "と"
-  footer_text: "© Lumino"
+  no_posts: No posts yet
+  all_tags: All Tags
+  posts_tagged: "Posts tagged #%{tag}"
+  footer_text: "© %{year} Lumino · Powered by Jekyll & GitHub Pages"

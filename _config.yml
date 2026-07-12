@@ -1,33 +1,23 @@
-# ── Site ──
-title: "Lumino"
-tagline: "thoughts & reflections"
-lang: en
-langs:
-  - key: en
-    label: EN
-    name: English
-  - key: zh
-    label: 中文
-    name: 简体中文
-  - key: ja
-    label: 日本語
-    name: 日本語
-
-# ── Domain (for RSS & canonical URLs) ──
+title: Lumino
+tagline: 随想与笔记
+description: 个人博客
 url: https://blog.realumino.org
-
-# ── Build ──
-markdown: kramdown
+baseurl: ""
 permalink: /:year/:month/:title/
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
 
 defaults:
   - scope:
       path: ""
-      type: posts
+      type: "posts"
     values:
       layout: post
+      lang: zh
 
-# ── Exclude ──
 exclude:
   - Gemfile
   - Gemfile.lock
