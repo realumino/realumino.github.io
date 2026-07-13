@@ -1,0 +1,26 @@
+title: Lumino
+tagline: 随想与笔记
+description: 个人博客
+url: https://blog.realumino.org
+baseurl: ""
+permalink: /:year/:month/:title/
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: post
+      lang: zh
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - README.md

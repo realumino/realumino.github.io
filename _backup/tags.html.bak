@@ -13,7 +13,7 @@ permalink: /tags/
 {% assign unique_tags = all_tags | uniq | sort %}
 
 {% if unique_tags.size > 0 %}
-<div class="tag-cloud">
+<div class="tag-cloud" style="margin-bottom: 2rem;">
   {% for tag in unique_tags %}
   <a class="tag" href="#{{ tag | slugify }}">{{ tag }}</a>
   {% endfor %}

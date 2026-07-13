@@ -18,7 +18,7 @@ layout: default
       </span>
       {% endif %}
       {% if page.lang and page.lang != "zh" %}
-      <span class="post-lang-badge">{{ page.lang | upcase }}</span>
+      <span class="post-lang-badge">[{{ page.lang }}]</span>
       {% endif %}
     </div>
   </header>

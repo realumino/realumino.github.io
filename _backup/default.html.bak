@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: 'zh' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
+  <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+  <link rel="alternate" type="application/rss+xml" title="{{ site.title }} RSS" href="{{ site.url }}/feed.xml">
+  <style>
+    :root {
+      --bg: #FDFDFD;
+      --text: #1A1A1A;
+      --text-secondary: #666;
+      --accent: #555;
+      --border: #E8E8E8;
+      --code-bg: #F4F4F4;
+      --tag-bg: #F0F0F0;
+      --tag-text: #555;
+      --max-width: 680px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 17px; }
+
+    body {
+      font-family: "Source Han Serif SC", "Noto Serif CJK SC", "Noto Serif SC", "STSong", "SimSun", "Songti SC", serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    /* ── Header ── */
+    header {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 1.5rem;
+      width: 100%;
+    }
+
+    header .site-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    header .site-title:hover { color: var(--accent); }
+
+    header .site-subtitle {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+      margin-top: 0.15rem;
+    }
+
+    nav {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 0.75rem;
+    }
+
+    nav a {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    nav a:hover, nav a.active {
+      color: var(--text);
+      border-bottom-color: var(--accent);
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 2.5rem 1.25rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    /* ── Post list (index) ── */
+    .post-list { list-style: none; }
+
+    .post-item {
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .post-item:first-child { padding-top: 0; }
+
+    .post-item .post-date {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.2rem;
+    }
+
+    .post-item .post-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .post-item .post-title:hover { color: var(--accent); }
+
+    .post-item .post-excerpt {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-top: 0.3rem;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.4rem;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      padding: 0.1rem 0.55rem;
+      border-radius: 3px;
+      text-decoration: none;
+    }
+
+    .tag:hover { background: var(--accent); color: #fff; }
+
+    /* ── Single post ── */
+    .post-header { margin-bottom: 2rem; }
+
+    .post-header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 0.5rem;
+    }
+
+    .post-meta {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      align-items: center;
+    }
+
+    .post-content {
+      padding-bottom: 2rem;
+    }
+
+    .post-content h2 {
+      font-size: 1.35rem;
+      margin: 2rem 0 0.6rem;
+      font-weight: 600;
+    }
+
+    .post-content h3 {
+      font-size: 1.1rem;
+      margin: 1.5rem 0 0.5rem;
+      font-weight: 600;
+    }
+
+    .post-content p { margin: 0.8rem 0; }
+
+    .post-content a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent);
+    }
+
+    .post-content a:hover { color: var(--text); border-bottom-color: var(--text); }
+
+    .post-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      margin: 1rem 0;
+    }
+
+    .post-content blockquote {
+      border-left: 3px solid var(--accent);
+      margin: 1rem 0;
+      padding: 0.3rem 0 0.3rem 1rem;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+
+    .post-content ul, .post-content ol {
+      margin: 0.6rem 0;
+      padding-left: 1.5rem;
+    }
+
+    .post-content li { margin: 0.25rem 0; }
+
+    .post-content code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", "SF Mono", Consolas, monospace;
+      font-size: 0.85em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+
+    .post-content pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem 1.2rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    .post-content pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .post-content hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    .post-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+
+    .post-content th, .post-content td {
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.75rem;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    .post-content th { background: var(--code-bg); font-weight: 600; }
+
+    /* ── Post navigation ── */
+    .post-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 2rem 0;
+      font-size: 0.9rem;
+    }
+
+    .post-nav a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .post-nav a:hover { text-decoration: underline; }
+
+    /* ── Back link ── */
+    .back-link {
+      display: inline-block;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      margin-bottom: 2rem;
+    }
+
+    .back-link:hover { color: var(--text); }
+
+    /* ── Tags page ── */
+    .tag-cloud { margin: 1.5rem 0; }
+
+    .tag-cloud .tag { font-size: 0.85rem; margin: 0.2rem 0.3rem; display: inline-block; }
+
+    .tag-group { margin: 2rem 0; }
+
+    .tag-group h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+      color: var(--accent);
+    }
+
+    .tag-group ul { list-style: none; padding: 0; }
+
+    .tag-group li {
+      padding: 0.35rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+
+    .tag-group li .date { color: var(--text-secondary); font-size: 0.8rem; margin-right: 0.75rem; }
+
+    .tag-group a { color: var(--text); text-decoration: none; }
+    .tag-group a:hover { color: var(--accent); }
+
+    /* ── Empty state ── */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 0;
+      color: var(--text-secondary);
+    }
+
+    .empty-state p { font-size: 1.1rem; }
+
+    /* ── Language switcher (placeholder) ── */
+    .lang-switcher {
+      display: flex;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    .lang-switcher button {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 0.1rem 0.5rem;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: inherit;
+    }
+
+    .lang-switcher button:hover,
+    .lang-switcher button.active {
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      html { font-size: 16px; }
+      header { padding-top: 1.5rem; }
+      .post-header h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="site-title" href="{{ site.url }}/">{{ site.title }}</a>
+  <span class="site-subtitle">{{ site.tagline }}</span>
+  <nav>
+    <a href="{{ site.url }}/" {% if page.url == "/" %}class="active"{% endif %}>首页</a>
+    <a href="{{ site.url }}/tags" {% if page.url == "/tags/" %}class="active"{% endif %}>标签</a>
+    <a href="{{ site.url }}/feed.xml">RSS</a>
+  </nav>
+</header>
+
+<main>
+{{ content }}
+</main>
+
+<footer>
+  <p>© {{ site.time | date: '%Y' }} Lumino · Powered by Jekyll & GitHub Pages</p>
+</footer>
+
+</body>
+</html>
