@@ -25,3 +25,8 @@ lang: zh
 当然，在使用Cloudflare AI Gateway的时候一开始遇到了点麻烦，我本来以为要添加一个自定义Provider然后指定为DeepSeek的Anthropic API，但是后来发现不需要，直接把Endpoint设定为`https://gateway.ai.cloudflare.com/v1/{account-id}/{gateway-name}/deepseek/anthropic`就可以了。这里的`/anthropic`并不是Cloudflare自己的兼容层，而是调用的DeepSeek自己的兼容接口。这也说明Cloudflare预定义的Provider也是纯粹的Base URL形式，没有搞别的限制或者花样
 
 唯一的缺陷就是在Dashboard中模型名称会显示为伪装后的名称，且计费、token计数都会失效。
+
+# Claude Code CLI
+
+这个是最经典的，虽然感觉整体体验上应该和图形界面版没啥区别。这有个“优势”就是不会强制要求模型ID有`claude`或`anthropic`之类的关键字，但除此之外也没别的了。同样的，Cloudflare AI Gateway对Anthropic API的请求会睁眼瞎，无法计数和预计费用。
+
