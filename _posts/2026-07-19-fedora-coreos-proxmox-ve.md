@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Fedora CoreOS 在 Proxmox VE 上点火与家庭娱乐组件部署"
-date: 2026-07-19 20:35:00 +0800
+date: 2026-07-19 14:00:00 +0800
 tags: [Proxmox VE, Fedora CoreOS, Home Lab]
 lang: zh
 ---
